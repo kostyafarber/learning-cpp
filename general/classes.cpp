@@ -21,16 +21,24 @@ public:
         return m_eyes;
     }
 
-    string get_name()
+    string get_name() const
     {
         return m_name;
     }
 
-    int get_fave_number()
+    int get_fave_number() const
     {
         return m_fav_number;
     }
 };
+
+void hello_msg(const Person &person) {
+    cout << "Hey there " << person.get_name() << ". It's cool your favourite number is: " << person.get_fave_number() << endl;
+}
+
+void hello_msg(Person *person) {
+    cout << "Hey there " << person->get_name() << ". It's cool your favourite number is: " << person->get_fave_number() << endl;
+}
 
 int main()
 {
@@ -40,5 +48,21 @@ int main()
     cout << me.get_name() << "'s "
                              "favourite number is "
          << me.get_fave_number() << " who also has " << me.get_eyes() << " eyes" << endl;
+
+    Person *kostya_ptr = nullptr;
+    kostya_ptr = &me;
+
+    cout << "Printing pointer to me object: " << kostya_ptr << endl;
+    cout << kostya_ptr->get_name() << endl; // using -> notation
+
+    hello_msg(&me);
+    cout << endl;
+    hello_msg(kostya_ptr);
+
+
+    cout << sizeof(me) << endl; // consider passing by reference, quite large
+    long long large_num;
+    cout << sizeof(large_num); // above object is 7x bigger than a long long. 
+
     return 0;
 }
