@@ -8,6 +8,7 @@ class Node {
         Node* left;
         Node* right;
 
+    // important constructor to remember
     Node(int val) {
         data = val;
         left = NULL;
