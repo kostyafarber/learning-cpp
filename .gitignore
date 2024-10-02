@@ -1,3 +1,6 @@
 .vscode
+.cursorrules
 Info.plist
 *dSYM
+build/
+_deps/
