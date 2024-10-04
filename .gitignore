@@ -4,3 +4,4 @@ Info.plist
 *dSYM
 build/
 _deps/
+cache/
