@@ -12,12 +12,17 @@ include_directories(${SDL2_INCLUDE_DIRS})
 # Find FreeType (which includes OpenType support)
 find_package(Freetype REQUIRED)
 include_directories(${FREETYPE_INCLUDE_DIRS})
+link_directories(${FREETYPE_LIBRARY_DIRS})
+
+add_library(TextRenderer STATIC exercises/TextRenderer/TextRenderer.cpp)
+include_directories(${CMAKE_SOURCE_DIR}/exercises/TextRenderer)
 
 function(add_exercise EXERCISE_NAME)
   add_executable(${EXERCISE_NAME} exercises/${EXERCISE_NAME}/main.cpp)
   target_link_libraries(${EXERCISE_NAME} 
         ${SDL2_LIBRARIES}
         ${FREETYPE_LIBRARIES}
+        TextRenderer
     )
 endfunction()
 
