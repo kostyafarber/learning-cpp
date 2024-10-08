@@ -1,3 +1,5 @@
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 #include <stdexcept>
 #include <string>
 
@@ -10,7 +12,7 @@ public:
 
 class TextRenderer {
 public:
-  TextRenderer(string face_path);
+  TextRenderer(const string &face_path);
 
   void set_font_size(int size);
 
@@ -22,5 +24,5 @@ public:
 
   ~TextRenderer();
 
-private:
+  sf::Font font;
 };
