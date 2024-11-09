@@ -35,13 +35,13 @@ public:
 
   // I need to actually move the items from other
   Task(const Task &other) noexcept
-      : name_(move(other.name_)), priority_(other.priority_),
-        data_(move(other.data_)) {};
+      : name_(std::move(other.name_)), priority_(other.priority_),
+        data_(std::move(other.data_)) {};
 
   // I need to actually move the items from other
   Task(Task &&other) noexcept
-      : name_(move(other.name_)), priority_(other.priority_),
-        data_(move(other.data_)) {};
+      : name_(std::move(other.name_)), priority_(other.priority_),
+        data_(std::move(other.data_)) {};
 
   Task &operator=(Task &&other) noexcept {
     data_ = other.data_;
@@ -58,9 +58,8 @@ public:
 
 class TaskQueue {
   // TODO: Choose appropriate container for storing tasks
-
   class Compare {
-
+  public:
     // needed to switch them why?
     bool operator()(Task a, Task b) { return (a.priority() < b.priority()); }
   };
@@ -87,4 +86,17 @@ public:
   }
 };
 
-int main() {}
+int main() {
+  Task t1("important task", 3, "do task 1");
+  Task t2("semi task", 2, "do task 2");
+  Task t3("very important task", 9, "do task 3");
+
+  TaskQueue tq;
+  tq.add_to_queue(t1);
+  tq.add_to_queue(t2);
+  tq.add_to_queue(t3);
+
+  tq.execute();
+  tq.execute();
+  tq.execute();
+}
