@@ -1,5 +1,10 @@
+#include <algorithm>
 #include <cstddef>
+#include <functional>
+#include <iostream>
 #include <string>
+#include <unordered_map>
+#include <utility>
 
 class EventEmitter;
 
@@ -63,4 +68,55 @@ public:
   }
 };
 
-class EventEmitter {};
+class EventEmitter {
+  // need to understand this syntax is it like a type alias? like in Go type
+  // Handler func()...
+  using Handler = std::function<void(const Event &)>;
+
+  std::unordered_map<string, vector<std::pair<size_t, Handler>>> m_handlers;
+  size_t m_next_handler_id = 0;
+
+public:
+  EventHandle on(string event_name, Handler h) {
+    auto e = EventHandle(this, event_name, m_next_handler_id);
+    m_handlers[event_name].push_back(make_pair(m_next_handler_id, h));
+
+    m_next_handler_id++;
+    return e;
+  }
+
+  void unregister(string event_name, size_t handler_id) {
+    auto &handlers = m_handlers[event_name];
+    handlers.erase(remove_if(handlers.begin(), handlers.end(),
+                             [handler_id](auto const &pair) {
+                               return pair.first == handler_id;
+                             }),
+                   handlers.end());
+  }
+
+  void emit(string event_name, string event_data) {
+    Event e(event_name, event_data);
+
+    auto handlers = m_handlers[event_name];
+
+    // this is making copies
+    for (auto const &h : handlers) {
+      h.second(e);
+    }
+  }
+};
+
+// Example usage:
+int main() {
+  EventEmitter emitter;
+
+  // This handle will automatically unregister when it goes out of scope
+  auto handle = emitter.on("user_login", [](const Event &e) {
+    std::cout << "User logged in with data: " << e.get_data() << "\n";
+  });
+
+  // Emit an event
+  emitter.emit("user_login", "user123");
+
+  return 0;
+}
