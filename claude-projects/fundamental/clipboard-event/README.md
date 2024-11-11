@@ -1,0 +1,3 @@
+# About
+
+Clipboard event handler.
